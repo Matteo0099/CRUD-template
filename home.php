@@ -10,7 +10,7 @@
   <div class="home-container">
     <nav>
       <ul>
-        <li>Home</li>
+        <li><a href="home.php">Home</a></li>
         <li><a href="logout.php">Logout</a></li>
       </ul>
     </nav>

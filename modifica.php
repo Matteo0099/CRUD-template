@@ -8,6 +8,14 @@
   <link rel="stylesheet" href="./assets/main.css">
 </head>
 <body>
+  <div class="modifica-container">
+    <nav>
+      <ul>
+        <li><a href="home.php">Home</a></li>
+        <li><a href="logout.php">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
   <form action="" method="post">
     <input type="text" name="username" placeholder="Username" value="<?php echo $_SESSION["user"]; ?>" required />
     <input type="password" name="password" placeholder="Password" required />
@@ -29,26 +37,29 @@ if (isset($_POST["modifica"]) || isset($_POST["elimina"]) || isset($_POST["aggiu
   $email = $_POST["email"];
   $nome = $_POST["nome"];
   $cognome = $_POST["cognome"];
-  $password_Hash = password_hash($password, PASSWORD_BCRYPT);
-
+  $password_Hash = password_hash($password, PASSWORD_BCRYPT); // hash password
   require_once "db_conn.php";
 
+  // Switch based on which action is triggered
   if (isset($_POST["modifica"])) {
     $sql = "UPDATE crud SET password=?, email=?, nome=?, cognome=? WHERE username=?";
-    $params = [$password_Hash, $email, $nome, $cognome, $username];
   } elseif (isset($_POST["elimina"])) {
     $sql = "DELETE FROM crud WHERE username=?";
-    $params = [$username];
   } elseif (isset($_POST["aggiungi"])) {
     $sql = "INSERT INTO crud (username, password, email, nome, cognome) VALUES (?, ?, ?, ?, ?)";
-    $params = [$username, $password_Hash, $email, $nome, $cognome];
   }
 
-  $stmt = mysqli_prepare($conn, $sql);
-  if ($stmt) {
-    mysqli_stmt_bind_param($stmt, str_repeat('s', count($params)), ...$params);
-    mysqli_stmt_execute($stmt);
-
+  $stmt = mysqli_stmt_init($conn); // Initialize a new statement
+  if (mysqli_stmt_prepare($stmt, $sql)) { // Prepare SQL statement
+    if (isset($_POST["modifica"])) {
+      mysqli_stmt_bind_param($stmt, "sssss", $password_Hash, $email, $nome, $cognome, $username); // Bind parameters for modification
+    } elseif (isset($_POST["elimina"])) {
+      mysqli_stmt_bind_param($stmt, "s", $username); // Bind parameter for deletion
+    } elseif (isset($_POST["aggiungi"])) {
+      mysqli_stmt_bind_param($stmt, "sssss", $username, $password_Hash, $email, $nome, $cognome); // Bind parameters for addition
+    }
+    mysqli_stmt_execute($stmt); // Execute the statement
+    // Avvio sessione
     $_SESSION["user"] = $username;
     header("Location: login.php");
     exit();

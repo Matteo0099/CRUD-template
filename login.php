@@ -20,36 +20,36 @@
 </html>
 
 <?php
-if (isset($_POST["submit"])) {
-  $email = $_POST["email"];
-  $password = $_POST["password"];
+  if (isset($_POST["submit"])) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
 
-  // invio i parametri al DB
-  require_once "db_conn.php";
-  $sql = "SELECT * FROM crud WHERE email = ?";
-  // prepara l'istruzione sql
-  $stmt = mysqli_stmt_init($conn);
-  mysqli_stmt_prepare($stmt, $sql);
-  mysqli_stmt_bind_param($stmt, "s", $email);
-  mysqli_stmt_execute($stmt);
-  $result = mysqli_stmt_get_result($stmt);
-  $user = mysqli_fetch_assoc($result);
+    // invio i parametri al DB
+    require_once "db_conn.php";
+    $sql = "SELECT * FROM crud WHERE email = ?";
+    // prepara l'istruzione sql
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $user = mysqli_fetch_assoc($result);
 
-  // verifico se c'è l'utente
-  if ($user) {
-    if (password_verify($password, $user["password"])) {
-      session_start();
-      // Store user data in session
-      $_SESSION["user"] = $user["username"];
-      $_SESSION["nome"] = $user["nome"];
-      $_SESSION["cognome"] = $user["cognome"];
-      $_SESSION["email"] = $user["email"];
-      // reindirizzamento alla home
-      header("Location: home.php");
-      exit();
+    // verifico se c'è l'utente
+    if ($user) {
+      if (password_verify($password, $user["password"])) {
+        session_start();
+        // Store user data in session
+        $_SESSION["user"] = $user["username"];
+        $_SESSION["nome"] = $user["nome"];
+        $_SESSION["cognome"] = $user["cognome"];
+        $_SESSION["email"] = $user["email"];
+        // reindirizzamento alla home
+        header("Location: home.php");
+        exit();
+      } else 
+          echo "<div class='alert alert-danger'>Password non corretta</div>";
     } else 
-        echo "<div class='alert alert-danger'>Password non corretta</div>";
-  } else 
-      echo "<div class='alert alert-danger'>Email non corretta</div>";
-}
+        echo "<div class='alert alert-danger'>Email non corretta</div>";
+  }
 ?>

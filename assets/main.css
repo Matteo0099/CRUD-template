@@ -38,6 +38,16 @@ form input {
   margin: 0 auto;
 }
 
+.modifica-container {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0 auto;
+}
+
 nav, ul {
   width: 100%;
   max-width: 1024px;
@@ -73,17 +83,21 @@ td, tr, th {
   max-width: 500px;
 }
 
-.btn {
+button, input[type="submit"] {
   height: 40px;
   border: 1px solid #999;
-  background: none;
+  background: #0ea5e9;
+  color: #fefefe;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .buttons {
   margin-top: 1rem;
 }
 
-.link {
+.link, a, .container {
   margin-top: 1rem;
   padding-left: .25rem;
 }
