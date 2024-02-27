@@ -40,7 +40,7 @@ if (isset($_POST["modifica"]) || isset($_POST["elimina"]) || isset($_POST["aggiu
   $password_Hash = password_hash($password, PASSWORD_BCRYPT); // hash password
   require_once "db_conn.php";
 
-  // Switch based on which action is triggered
+  // MODIFICA, ELIMINA, AGGIUNGI
   if (isset($_POST["modifica"])) {
     $sql = "UPDATE crud SET password=?, email=?, nome=?, cognome=? WHERE username=?";
   } elseif (isset($_POST["elimina"])) {
@@ -49,17 +49,18 @@ if (isset($_POST["modifica"]) || isset($_POST["elimina"]) || isset($_POST["aggiu
     $sql = "INSERT INTO crud (username, password, email, nome, cognome) VALUES (?, ?, ?, ?, ?)";
   }
 
-  $stmt = mysqli_stmt_init($conn); // Initialize a new statement
-  if (mysqli_stmt_prepare($stmt, $sql)) { // Prepare SQL statement
+  $stmt = mysqli_stmt_init($conn); 
+  // verifico se viene fatta la query (update,delete o insert)
+  if (mysqli_stmt_prepare($stmt, $sql)) { 
     if (isset($_POST["modifica"])) {
-      mysqli_stmt_bind_param($stmt, "sssss", $password_Hash, $email, $nome, $cognome, $username); // Bind parameters for modification
+      mysqli_stmt_bind_param($stmt, "sssss", $password_Hash, $email, $nome, $cognome, $username); 
     } elseif (isset($_POST["elimina"])) {
-      mysqli_stmt_bind_param($stmt, "s", $username); // Bind parameter for deletion
+      mysqli_stmt_bind_param($stmt, "s", $username); 
     } elseif (isset($_POST["aggiungi"])) {
-      mysqli_stmt_bind_param($stmt, "sssss", $username, $password_Hash, $email, $nome, $cognome); // Bind parameters for addition
+      mysqli_stmt_bind_param($stmt, "sssss", $username, $password_Hash, $email, $nome, $cognome); 
     }
-    mysqli_stmt_execute($stmt); // Execute the statement
-    // redirect if modify or delete
+    mysqli_stmt_execute($stmt); // eseguo la query
+    
     if(isset($_POST["modifica"]) || isset($_POST["elimina"])) {
       // Avvio sessione
       $_SESSION["user"] = $username;

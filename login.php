@@ -39,7 +39,7 @@
     if ($user) {
       if (password_verify($password, $user["password"])) {
         session_start();
-        // Store user data in session
+        // dati della sessione
         $_SESSION["user"] = $user["username"];
         $_SESSION["nome"] = $user["nome"];
         $_SESSION["cognome"] = $user["cognome"];

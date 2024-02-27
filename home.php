@@ -92,7 +92,7 @@
             ($ral === "" || $person["ral"] == $ral) &&
             ($codice_fiscale === "" || $person["codice_fiscale"] === $codice_fiscale)
           ) {
-            // Output the person's details within table rows and cells
+            // tutti i campi della persona/e cercata/e
             echo "<tr>";
               echo "<td>" . $person["cognome"] . "</td>";
               echo "<td>" . $person["nome"] . "</td>";
