@@ -59,10 +59,13 @@ if (isset($_POST["modifica"]) || isset($_POST["elimina"]) || isset($_POST["aggiu
       mysqli_stmt_bind_param($stmt, "sssss", $username, $password_Hash, $email, $nome, $cognome); // Bind parameters for addition
     }
     mysqli_stmt_execute($stmt); // Execute the statement
-    // Avvio sessione
-    $_SESSION["user"] = $username;
-    header("Location: login.php");
-    exit();
+    // redirect if modify or delete
+    if(isset($_POST["modifica"]) || isset($_POST["elimina"])) {
+      // Avvio sessione
+      $_SESSION["user"] = $username;
+      header("Location: login.php");
+      exit();
+    }
   } 
 }
 ?>
